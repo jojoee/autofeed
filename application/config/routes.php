@@ -54,15 +54,23 @@ $route['quote'] = 'welcome/quote';
 */
 
 // $route['nn'] = 'news';
-$route['nn/link/(:any)'] = 'news/update_link/$1';
-$route['nn/seelink/(:any)'] = 'news/see_link/$1';
+
 // $route['nn/view/(:any)'] = 'news/update_view/$1';
 // $route['nn/seeview/(:any)'] = 'news/see_link/$1';
 
-$route['nn/post'] = 'news/post_news';
-$route['nn/alllink'] = 'news/update_all_links';
+$route['nn/link'] = 'news/update_all_news_links';
+$route['nn/link/(:any)'] = 'news/update_news_link/$1';
+$route['nn/post'] = 'news/post/news';
+
+$route['nn/pantiplink'] = 'news/update_all_pantip_links';
+$route['nn/pantiplink/(:any)'] = 'news/update_pantip_link/$1';
+$route['nn/pantippost'] = 'news/post/pantip';
+
+$route['nn/seelink/(:any)'] = 'news/see_link/$1';
+
 $route['nn/stop'] = 'news/stop';
 $route['nn/start'] = 'news/start';
+$route['nn/clean'] = 'news/clean';
 
 $route['nn/fbullss'] = 'news/facebook_user_long_lived_session';
 $route['nn/fbpllss'] = 'news/facebook_page_long_lived_session';

@@ -4,19 +4,45 @@
 	#Constants
 	================================================================*/
 
-function get_github_url()          { return GITHUB_URL; }
-function get_facebook_url()        { return FACEBOOK_URL; }
-function get_twitter_url()         { return TWITTER_URL; }
+/**
+ * [get_github_url description]
+ * TESTED
+ * 
+ * @return [type] [description]
+ */
+function get_github_url() { return GITHUB_URL; }
 
-function get_google_map_key()      { return GOOGLE_MAP_KEY; }
-function get_ga_code()             { return GA_CODE; }
+/**
+ * [get_facebook_url description]
+ * TESTED
+ * 
+ * @return [type] [description]
+ */
+function get_facebook_url() { return FACEBOOK_URL; }
 
-function get_facebook_app_id()            { return FB_APP_ID; }
-function get_facebook_app_secret()        { return FB_APP_SECRET; }
-function get_facebook_user_id()           { return FB_USER_ID; }
-function get_facebook_user_access_token() { return FB_USER_ACCESS_TOKEN; }
-function get_facebook_page_id()           { return FB_PAGE_ID; }
-function get_facebook_page_access_token() { return FB_PAGE_ACCESS_TOEKN; }
+/**
+ * [get_twitter_url description]
+ * TESTED
+ * 
+ * @return [type] [description]
+ */
+function get_twitter_url() { return TWITTER_URL; }
+
+/**
+ * [get_google_map_key description]
+ * TESTED
+ * 
+ * @return [type] [description]
+ */
+function get_google_map_key() { return GOOGLE_MAP_KEY; }
+
+/**
+ * [get_ga_code description]
+ * TESTED
+ * 
+ * @return [type] [description]
+ */
+function get_ga_code() { return GA_CODE; }
 
 /*================================================================
 	#Debug
@@ -30,13 +56,16 @@ function dd($var, $die = true)
 	if ($die) die();
 }
 
+function da($var) { dd($var, false); }
+
 /*================================================================
 	#Utility
 	================================================================*/
 
 /**
  * check string is null or empty
- *
+ * TESTED
+ * 
  * @link	 http://stackoverflow.com/questions/381265/better-way-to-check-variable-for-null-or-empty-string
  * @param	[string]	$str
  * @return boolean
@@ -89,14 +118,15 @@ function get_referrer_link()
 
 /**
  * is string start with 'your-string'
- *
- * @see http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
+ * TESTED
  * 
- * @example startsWith("abcdef", "ab") // true
- * @example startsWith("abcdef", "cd") // false
- * @example startsWith("abcdef", "ef") // false
- * @example startsWith("abcdef", "") // true
- * @example startsWith("", "abcdef") // false
+ * @link http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
+ * 
+ * @example start_with("abcdef", "ab") // true
+ * @example start_with("abcdef", "cd") // false
+ * @example start_with("abcdef", "ef") // false
+ * @example start_with("abcdef", "") // true
+ * @example start_with("", "abcdef") // false
  */
 function start_with($haystack, $needle)
 {
@@ -105,15 +135,17 @@ function start_with($haystack, $needle)
 }
  
 /**
- * is string start with 'your-string'
+ * is string end with 'your-string'
+ * TESTED
+ * 
  *
- * @see http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
+ * @link http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
  *
- * @example endsWith("abcdef", "ab") // false
- * @example endsWith("abcdef", "cd") // false
- * @example endsWith("abcdef", "ef") // true
- * @example endsWith("abcdef", "") // true
- * @example endsWith("", "abcdef") // false
+ * @example end_with("abcdef", "ab") // false
+ * @example end_with("abcdef", "cd") // false
+ * @example end_with("abcdef", "ef") // true
+ * @example end_with("abcdef", "") // true
+ * @example end_with("", "abcdef") // false
  */
 function end_with($haystack, $needle)
 {
@@ -124,7 +156,7 @@ function end_with($haystack, $needle)
 /**
  * gets the data from a URL
  *
- * @see http://davidwalsh.name/curl-download
+ * @link http://davidwalsh.name/curl-download
  * 
  * @example $arr = 'myvar1=' . $myvar1 . '&myvar2=' . $myvar2;
  */
@@ -150,10 +182,11 @@ function get_url_data($url, $post_datas = '')
 }
 
 /**
- * [get_current_domain_name description]
+ * [get_current_domain_name description] only domain name (no sub domain)
+ * TESTED
  *
- * @see	http://stackoverflow.com/questions/10717249/get-current-domain
- * @see	http://stackoverflow.com/questions/1201194/php-getting-domain-name-from-subdomain
+ * @link	http://stackoverflow.com/questions/10717249/get-current-domain
+ * @link	http://stackoverflow.com/questions/1201194/php-getting-domain-name-from-subdomain
  *
  * @example get_domain_name() // current domain name
  * @example http://somedomain.co.uk // somedomain.co.uk
@@ -174,7 +207,7 @@ function get_domain_name($url = '')
 {
 	if (is_null_or_empty_string($url))
 	{
-		return $_SERVER['SERVER_NAME'];
+		return get_full_domain_name();
 	}
 	else
 	{
@@ -190,23 +223,23 @@ function get_domain_name($url = '')
 
 /**
  * [get_request_url description]
+ * TESTED
  * 
  * @example /
  * @example /stainless-steel/urinals
  * 
  * @return [type] [description]
  */
-function get_request_url($url = '', $domain_name = '')
+function get_request_url($url = '', $full_domain_name = '')
 {	
 	$results = "$_SERVER[REQUEST_URI]";
 
-	if ( ! is_null_or_empty_string($domain_name) && ! is_null_or_empty_string($domain_name))
+	if ( ! is_null_or_empty_string($full_domain_name) && ! is_null_or_empty_string($full_domain_name))
 	{
 		$banned_str = array(
-			'http://www.',
 			'https://',
 			'http://',
-			$domain_name
+			$full_domain_name
 		);
 		$results = str_replace($banned_str, '', remove_trailing_slash($url));
 		$results = '/'.ltrim($results, '/');
@@ -215,35 +248,80 @@ function get_request_url($url = '', $domain_name = '')
 	return $results;
 }
 
-function get_request_uri($uri, $domain_name) { return get_request_url($uri, $domain_name); }
+/**
+ * [get_request_uri description]
+ * TESTED
+ * 
+ * @param  [type] $uri              [description]
+ * @param  [type] $full_domain_name [description]
+ * @return [type]                   [description]
+ */
+function get_request_uri($uri, $full_domain_name) { return get_request_url($uri, $full_domain_name); }
 
+/**
+ * [get_full_domain_name description]
+ * TESTED
+ * 
+ * @param  string $url [description]
+ * @return [type]      [description]
+ */
+function get_full_domain_name($url = '')
+{
 
+	if (is_null_or_empty_string($url))
+	{
+		return $_SERVER['SERVER_NAME'];
+	}
+	else
+	{
+		return parse_url($url, PHP_URL_HOST);	
+	}
+}
 
 /**
  * [is_url_exists description]
+ * TESTED
+ * 
  * @param	[type]	$url [description]
  *
  * HTTP/1.1 200 OK Date: Fri, 27 Feb 2015 07:33:01 GMT Server: Apache/2.2.29 (Unix) mod_ssl/2.2.29 OpenSSL/1.0.1e-fips mod_bwlimited/1.4 X-Powered-By: PHP/5.4.34 Expires: Thu, 19 Nov 1981 08:52:00 GMT Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0 Pragma: no-cache Set-Cookie: PHPSESSID=v6s6ufjgj3h3stk111bmgtt0h0; path=/ Set-Cookie: ci_session=a%3A5%3A%7Bs%3A10%3A%22session_id%22%3Bs%3A32%3A%226381b64c912fa51884ddf7e523bcad9a%22%3Bs%3A10%3A%22ip_address%22%3Bs%3A13%3A%2254.255.143.64%22%3Bs%3A10%3A%22user_agent%22%3Bb%3A0%3Bs%3A13%3A%22last_activity%22%3Bi%3A1425022382%3Bs%3A9%3A%22user_data%22%3Bs%3A0%3A%22%22%3B%7D0048f31a44445bc38328040f5b11fca6; expires=Fri, 27-Feb-2015 09:33:02 GMT; path=/ Vary: User-Agent,Accept-Encoding Expires: Tue, 16 Jun 2025 20:00:00 GMT Content-Type: text/html
  *
- * @see https://css-tricks.com/snippets/php/check-if-website-is-available/
- * @see http://stackoverflow.com/questions/2280394/how-can-i-check-if-a-url-exists-via-php
+ * @link https://css-tricks.com/snippets/php/check-if-website-is-available/
+ * @link http://stackoverflow.com/questions/2280394/how-can-i-check-if-a-url-exists-via-php
  * @return boolean			[description]
  */
-function is_url_exists($url) {
+function is_url_exists($url)
+{
 	$response = get_header_response($url);
-
 	if ($response) return true;
 
 	return false;	
 }
 
+/**
+ * [is_404 description]
+ * TESTED
+ * 
+ * @param  [type]  $url [description]
+ * @return boolean      [description]
+ */
+function is_404($url)
+{
+	$response = get_header_response($url);
+	if (strpos($response, '404 Not Found')) return true;
+
+	return false;	
+}
+
+/**
+ * [get_header_response description]
+ * @param  [type] $url [description]
+ * @return [type]      [description]
+ */
 function get_header_response($url)
 {
 	//check, if a valid url is provided
-	if( ! filter_var($url, FILTER_VALIDATE_URL))
-	{
-		return false;
-	}
+	if( ! filter_var($url, FILTER_VALIDATE_URL)) return false;
 
 	//initialize curl
 	$curl_init = curl_init($url);
@@ -261,15 +339,28 @@ function get_header_response($url)
 	return $response;
 }
 
+/**
+ * [is_url_redirects description]
+ * TESTED
+ * 
+ * @param  [type]  $url [description]
+ * @return boolean      [description]
+ */
 function is_url_redirects($url)
 {
 	$response = get_header_response($url);
-
 	if (strpos($response, 'Location:')) return true;
 
 	return false;	
 }
 
+/**
+ * [get_extension description]
+ * TESTED
+ * 
+ * @param  [type] $file_name [description]
+ * @return [type]            [description]
+ */
 function get_extension($file_name)
 {
 	$pieces = explode('.', $file_name);
@@ -280,21 +371,76 @@ function get_extension($file_name)
 
 /**
  * [get_full_url description]
- *
- * @see http://stackoverflow.com/questions/6768793/get-the-full-url-in-php
- * @see http://stackoverflow.com/questions/14912943/how-to-print-current-url-path
+ * TESTED
+ * 
+ * @link http://stackoverflow.com/questions/6768793/get-the-full-url-in-php
+ * @link http://stackoverflow.com/questions/14912943/how-to-print-current-url-path
  * 
  * @return [type] [description]
  */
 function get_full_url()
 {
 	$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-	// $actual_link = 'http://'. $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 
 	return $actual_link;
 }
 
-function remove_trailing_slash($str) { return rtrim($str, '/'); }
+/**
+ * [remove_trailing_slash description]
+ * TESTED
+ * 
+ * @param  [type] $str [description]
+ * @return [type]      [description]
+ */
+function remove_trailing_slash($str)
+{
+	return rtrim($str, '/');
+}
+
+/**
+ * [get_date_ago description]
+ * @param  string $n [description]
+ * @return [type]    [description]
+ */
+function get_date_ago($n = '30') { return date('Y-m-d', strtotime('-'.$n.' days')); }
+
+
+/**
+ * [nhuman_time_diff description]
+ * @param  [type] $from [description]
+ * @param  [type] $to   [description]
+ * @link http://stackoverflow.com/questions/2915864/php-how-to-find-the-time-elapsed-since-a-date-time
+ * @return [type]       [description]
+ */
+function human_time_diff($from, $to)
+{
+	$diff_time = $to - $from;
+
+	$tokens = array (
+		31536000 => 'year',
+		2592000  => 'month',
+		604800   => 'week',
+		86400    => 'day',
+		3600     => 'hour',
+		60       => 'minute',
+		1        => 'second'
+	);
+
+	foreach ($tokens as $unit => $text) {
+		
+		if ($time < $unit) continue;
+
+		$number_of_units = floor($time / $unit);
+
+		return $number_of_units.' '.$text.(($number_of_units > 1) ? 's':'' );
+	}
+}
+
+
+
+
+
+
 
 
 

@@ -49,12 +49,7 @@ define('TWITTER_URL'              , 'TWITTER_URL');
 define('GOOGLE_MAP_KEY'           , 'GOOGLE_MAP_KEY');
 define('GA_CODE'                  , 'UA-XXXXXXXX-X');
 
-define('FB_APP_ID'                , 'FB_APP_ID');
-define('FB_APP_SECRET'            , 'FB_APP_SECRET');
-define('FB_USER_ID'               , 'FB_USER_ID');
-define('FB_USER_ACCESS_TOKEN'     , 'FB_USER_ACCESS_TOKEN');
-define('FB_PAGE_ID'               , 'FB_PAGE_ID');
-define('FB_PAGE_ACCESS_TOEKN'     , 'FB_PAGE_ACCESS_TOEKN');
+// manage_pages, publish_pages, publish_actions, public_profile
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
