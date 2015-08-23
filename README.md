@@ -1,5 +1,5 @@
 # AutoFeed
-(In Progress) grab url from target site and post/public to social media, e.g. [https://www.facebook.com/anynews](www.facebook.com/anynews) (every 15 mins)
+(In Progress) grab url from target site and post/public to social media, e.g. [https://www.facebook.com/anynews](https://www.facebook.com/anynews) (every 15 mins)
 
 ## Future Updates
 
