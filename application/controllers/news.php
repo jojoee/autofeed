@@ -55,16 +55,16 @@ class News extends CI_Controller {
 	/**
 	 * Get `site` by name id
 	 * 
-	 * @param  [type] $name_id [description]
-	 * @return [type]          [description]
+	 * @param  [number] $site_id
+	 * @return [array]
 	 */
-	private function get_site_by_name_id($name_id)
+	private function get_site_by_site_id($site_id)
 	{
 		$results = array();
 
 		foreach ($this->sites as $site)
 		{
-			if ($site['id'] == $name_id)
+			if ($site['id'] == $site_id)
 			{
 				$results = $site;
 				break;
@@ -72,6 +72,42 @@ class News extends CI_Controller {
 		}
 
 		return $results;
+	}
+
+	// private function set_facebook_page()
+	// {
+	// 	switch ($this->page_type)
+	// 	{
+	// 		case 'news':
+	// 			$this->page_id = $this->fb_model->get_facebook_news_page_id();
+	// 			$this->page_access_token = $this->fb_model->get_facebook_news_page_access_token();
+	// 			break;
+	// 		case 'pantip':
+	// 			$this->page_id = $this->fb_model->get_facebook_pantip_page_id();
+	// 			$this->page_access_token = $this->fb_model->get_facebook_pantip_page_access_token();
+	// 			break;
+	// 		case 'edu':
+	// 			$this->page_id = $this->fb_model->get_facebook_edu_page_id();
+	// 			$this->page_access_token = $this->fb_model->get_facebook_edu_page_access_token();
+	// 			break;
+	// 		case 'jojoee':
+	// 			$this->page_id = $this->fb_model->get_facebook_jojoee_page_id();
+	// 			$this->page_access_token = $this->fb_model->get_facebook_jojoee_page_access_token();
+	// 			break;
+	// 		case 'youv':
+	// 			$this->page_id = $this->fb_model->get_facebook_youv_page_id();
+	// 			$this->page_access_token = $this->fb_model->get_facebook_youv_page_access_token();
+	// 			break;
+	// 		default:
+	// 			$this->page_id = $this->fb_model->get_facebook_news_page_id();
+	// 			$this->page_access_token = $this->fb_model->get_facebook_news_page_access_token();
+	// 	}
+	// }
+
+	private function set_facebook_page()
+	{
+		$this->page_id = $this->fb_model->get_facebook_page_id($this->page_type);
+		$this->page_access_token = $this->fb_model->get_facebook_page_access_token($this->page_type);
 	}
 
 	/**
@@ -87,21 +123,7 @@ class News extends CI_Controller {
 		$this->user_id = $this->fb_model->get_facebook_user_id();
 		$this->user_access_token = $this->fb_model->get_facebook_user_access_token();
 
-		if ($this->page_type == 'pantip')
-		{
-			$this->page_id = $this->fb_model->get_facebook_pandrift_page_id();
-			$this->page_access_token = $this->fb_model->get_facebook_pandrift_page_access_token();	
-		}
-		else if ($this->page_type == 'news')
-		{
-			$this->page_id = $this->fb_model->get_facebook_drama_page_id();
-			$this->page_access_token = $this->fb_model->get_facebook_drama_page_access_token();	
-		}
-		else
-		{
-			$this->page_id = $this->fb_model->get_facebook_drama_page_id();
-			$this->page_access_token = $this->fb_model->get_facebook_drama_page_access_token();	
-		}
+		$this->set_facebook_page();
 
 		// initialize your app using your key and secret
 		FacebookSession::setDefaultApplication($this->app_id , $this->app_secret);
@@ -113,18 +135,18 @@ class News extends CI_Controller {
 	/**
 	 * Publish the facebook status
 	 * 
-	 * @param  [type] $post_title [description]
-	 * @param  [type] $post_url   [description]
-	 * @return [type]             [description]
+	 * @param  [string] $post_title
+	 * @param  [string] $post_url
+	 * @return [array]  facebook action array
 	 */
 	private function publish_facebook($post_title, $post_url)
 	{
 		$this->set_facebook_app();
 
 		$admin_name = '';
-		if ($this->$page_type == 'news') $admin_name = $this->news_model->get_random_admin()[0]['name'];
+		if ($this->page_type == 'news') $admin_name = '- '.$this->news_model->get_random_admin()[0]['name'];
 
-		$message = sprintf('%s %s - %s',
+		$message = sprintf('%s %s %s',
 			html_entity_decode($post_title),
 			$post_url,
 			$admin_name
@@ -157,10 +179,6 @@ class News extends CI_Controller {
 		return $action;
 	}
 
-	/**
-	 * [is_allowed_time description]
-	 * @return boolean [description]
-	 */
 	private function is_allowed_time()
 	{
 		// TODO
@@ -172,10 +190,11 @@ class News extends CI_Controller {
 	}
 
 	/**
-	 * [format_link_data description]
-	 * @param  [type] $links [description]
-	 * @param  [type] $site  [description]
-	 * @return [type]        [description]
+	 * Format all links
+	 * 
+	 * @param  [array] $links all link data
+	 * @param  [array] $site current site info
+	 * @return [type]  formatted data
 	 */
 	private function format_link_data($links, $site)
 	{
@@ -207,15 +226,21 @@ class News extends CI_Controller {
 	}
 
 	/**
-	 * [get_targeted_data description]
+	 * Get selected element
 	 * 
-	 * @param  [type] $link_url     [description]
-	 * @param  [type] $link_element [description]
-	 * @return [type]               [description]
+	 * @param  [string] $link_url     url
+	 * @param  [string] $link_element target element
+	 * @return [array]  array of selected element
 	 */
 	private function get_targeted_data($link_url, $link_element)
 	{
-		if ( ! is_url_exists($link_url)) return array();
+		// 
+		// TODO
+		// don't know why it doesn't work
+		// e.g. http://lab.jojoee.com/nn/link/eduzonesstudy
+		// 
+		// if ( ! is_url_exists($link_url)) return array();
+		// 
 
 		require_once('vendor/php-simple-html-dom-parser/Src/Sunra/PhpSimple/simplehtmldom_1_5/simple_html_dom.php');
 
@@ -226,33 +251,33 @@ class News extends CI_Controller {
 		catch (Exception $ex)
 		{
 			printf('Caught exception: %s', $ex->getMessage());
-			$this->news_model->insert_error_log('get_targeted_data - file_get_html', $e->getMessage());
+			$this->news_model->insert_error_log('get_targeted_data', 'file_get_html : '.$e->getMessage());
 
 			return array();
 		}
 
-		if ( ! isset($html) && is_null_or_empty_string($html)) return array();
+		if ( ! isset($html) || is_null_or_empty_string($html)) return array();
 
 		try
 		{
-			$links = $html->find($link_element);
+			$items = $html->find($link_element);
 		}
 		catch (Exception $ex)
 		{
 			printf('Caught exception: %s', $ex->getMessage());
-			$this->news_model->insert_error_log('get_targeted_data - find', $e->getMessage());
+			$this->news_model->insert_error_log('get_targeted_data', 'find : '.$e->getMessage());
 
 			return array();
 		}
 
-		return $links;
+		return $items;
 	}
 
 	/**
-	 * Get link data from `site_name`
+	 * Get link data from `site name`
 	 * 
-	 * @param  [type] $site_name [description]
-	 * @return [type]           [description]
+	 * @param  [string] $site_name
+	 * @return [array]  all links
 	 */
 	private function get_link_data($site_name)
 	{
@@ -269,132 +294,73 @@ class News extends CI_Controller {
 		return $items;
 	}
 
-	/**
-	 * Set the request uri
-	 * 
-	 * @param [type]  $uri          [description]
-	 * @param string  $full_domain_name  [description]
-	 * @param integer $is_full_path [description]
-	 */
 	private function set_request_uri($uri, $full_domain_name = '', $is_full_path = 0)
 	{
 		$results = $uri;
-		if ( ! $is_full_path) $results = get_request_uri($uri, $full_domain_name);
+		if ($is_full_path == 0) $results = get_request_uri($uri, $full_domain_name);
 		
 		return urldecode($results);
 	}
 
-	/*================================================================
-		#Public
-		================================================================*/
-
 	/**
 	 * Get the correctly format of url
 	 * 
-	 * @param  [type] $url  [description]
-	 * @param  [type] $site [description]
-	 * @return [type]       [description]
+	 * @param  [string] $url
+	 * @param  [array]  $site site info
+	 * @return [string] proper url format
 	 */
-	public function get_post_url($request_uri, $site)
+	private function get_post_url($request_uri, $site)
 	{
 		$post_url = $request_uri;
-		if ( ! $site['is_full_path']) $post_url = remove_trailing_slash($site['url']).$request_uri;
+		if ($site['is_full_path'] == 0) $post_url = remove_trailing_slash($site['url']).$request_uri;
 
 		return $post_url;
 	}
 
-	/**
-	 * Update facebook page status
-	 * 
-	 * @return [type] [description]
-	 */
-	public function post($type)
+	// private function get_random_posts()
+	// {
+	// 	$urls = array();
+	// 	switch ($this->page_type)
+	// 	{
+	// 		case 'news':
+	// 			$urls = $this->news_model->get_random_news($this->post_limit);
+	// 			break;
+	// 		case 'pantip':
+	// 			$urls = $this->news_model->get_random_pantip($this->post_limit);
+	// 			break;
+	// 		case 'edu':
+	// 			$urls = $this->news_model->get_random_edu($this->post_limit);
+	// 			break;
+	// 		case 'jojoee':
+	// 			$urls = $this->news_model->get_random_jojoee($this->post_limit);
+	// 			break;
+	// 		case 'youv':
+	// 			$urls = $this->news_model->get_random_youv($this->post_limit);
+	// 			break;
+	// 		default:
+	// 			$urls = $this->news_model->get_random_news($this->post_limit);
+	// 	}
+	//
+	// 	return $urls;
+	// }
+
+	private function get_random_posts() { return $this->news_model->get_random_urls($this->page_type, $this->post_limit); }
+	private function get_latest_posts() { return $this->news_model->get_latest_urls($this->page_type, $this->post_limit); }
+
+	private function get_posts()
 	{
-		// if ( ! is_allowed_time() ) return false;
+		$urls = $this->get_random_posts();
+		// $urls = $this->get_latest_posts();
 
-		$count = 0;
-		$this->page_type = $type;
-
-		if ($this->page_type == 'pantip')    $urls = $this->news_model->get_random_pantip($this->post_limit);
-		else if ($this->page_type == 'news') $urls = $this->news_model->get_random_news($this->post_limit);
-		else                                 $urls = $this->news_model->get_random_news($this->post_limit);
-
-		if (empty($urls)) return false;
-
-		$index = range(0, $this->post_limit - 1);
-		shuffle($index);
-
-		while ($count < 8)
-		{
-			$url = $urls[$index[$count]];
-			$site = $this->get_site_by_name_id($url['name_id']);
-
-			$post_title = $url['title'];
-			
-			// get post url
-			$post_url = $this->get_post_url($url['request_uri'], $site);
-
-			if (is_url_exists(urldecode($post_url)))
-			{
-				// 
-				// TODO - Use comment as a title
-				// 
-				// $comment = array();
-				// $comment_element = $site['comment_element'];
-				// if ($site['has_comment']) $comment = $this->get_targeted_data($post_url, $comment_element);
-				// 
-
-				// Facebook
-				try
-				{
-					$action = $this->publish_facebook($post_title, $post_url);
-					$action_id = $action['id'];
-					$this->news_model->update_published_link($url['id']);
-				}
-				catch (FacebookRequestException $ex)
-				{
-					printf('FacebookRequestException: %s', $ex->getMessage());
-					$this->news_model->insert_error_log('post, is_url_exists, FacebookRequestException', $e->getMessage());
-
-					return false;
-				}
-				catch (\Exception $ex)
-				{
-					printf('Caught exception: %s', $ex->getMessage());
-					$this->news_model->insert_error_log('post, is_url_exists, Exception', $e->getMessage());
-
-					return false;
-				}
-
-				break;
-			}
-			else
-			{
-				$this->news_model->update_broken_link($url['id']);
-			}
-
-			$count++;
-		}
-
-		if (isset($action_id) && ! is_null_or_empty_string($action_id))
-		{
-			$this->news_model->insert_published_log($url['id'], $action_id);
-			printf('<code>Published</code>');
-		}
-		else
-		{
-			$this->news_model->insert_error_log('post, all url aren\'t exist', $e->getMessage());
-			printf('<code>Can\'t publish (all url aren\'t exist)</code>');
-		}
+		return $urls;
 	}
 
 	/**
-	 * Update the url by `site_name`
+	 * Update link by `site_name`
 	 * 
-	 * @param  [type] $site_name [description]
-	 * @return [type]            [description]
+	 * @param [string] $site_name
 	 */
-	public function update_link($site_name)
+	private function update_link($site_name)
 	{
 		if ( ! isset($this->sites[$site_name])) return false;
 
@@ -403,7 +369,7 @@ class News extends CI_Controller {
 		
 		if (count($items) == 0)
 		{
-			$this->news_model->insert_error_log('update_link', 'site down or 0 link found from '.$site_name);
+			$this->news_model->insert_error_log('update_link', $site_name.' : site down or not found link');
 		}
 		else
 		{
@@ -421,48 +387,56 @@ class News extends CI_Controller {
 		);
 	}
 
-	/**
-	 * [update_news_link description]
-	 * @param  [type] $site_name [description]
-	 * @return [type]            [description]
-	 */
-	public function update_news_link($site_name)
+	// private function update_site($type, $site_name)
+	// {
+	// 	$this->page_type = $type;
+	// 	$this->set_sites($this->page_type);
+	// 	$this->update_link($site_name);
+	// }
+	
+	private function is_type_exists($type)
 	{
-		$this->page_type = 'news';
-		$this->set_sites($this->page_type);
+		$site = $this->news_model->get_sites_by_type($type);
+		
+		if ( ! empty($site)) return true;
+		else return false;
+	}
+
+	private function is_site_name_exists($site_name)
+	{
+		$site = $this->news_model->get_site_by_name($site_name);
+		
+		if ( ! empty($site)) return true;
+		else return false;
+	}
+
+	/*================================================================
+		#Public
+		================================================================*/
+
+	public function log($name)
+	{
+		$this->news_model->update_log($name);
+		echo 'Logged';
+	}
+
+	public function update_site($site_name)
+	{
+		// if site name is exists
+		if ( ! $this->is_site_name_exists($site_name)) return false;
+
+		$this->page_type = $this->news_model->get_type_by_site_name($site_name);
 		$this->update_link($site_name);
 	}
 
-	/**
-	 * [update_pantip_link description]
-	 * @param  [type] $site_name [description]
-	 * @return [type]            [description]
-	 */
-	public function update_pantip_link($site_name)
+	public function update_all_sites($type)
 	{
-		$this->page_type = 'pantip';
-		$this->set_sites($this->page_type);
-		$this->update_link($site_name);
-	}
+		// if type is exists
+		if ( ! $this->is_type_exists($type)) return false;
 
-	/**
-	 * Update all url
-	 * 
-	 * @return [type] [description]
-	 */
-	public function update_all_news_links()
-	{
-		$this->page_type = 'news';
+		$this->page_type = $type;
 		$this->set_sites($this->page_type);
-		$this->update_all_links();
-	}
 
-	/**
-	 * [update_all_links description]
-	 * @return [type] [description]
-	 */
-	public function update_all_links()
-	{
 		ini_set('max_execution_time', 300);
 		$started_time = microtime(true);
 
@@ -472,22 +446,117 @@ class News extends CI_Controller {
 		printf('<br /><code>%d links found, Total execution time %f<br />', $this->found_link, $time_elapsed_secs);
 	}
 
+	// public function update_news_link($site_name) { $this->update_site('news', $site_name);}
+	// public function update_pantip_link($site_name) { $this->update_site('pantip', $site_name); }
+	// public function update_edu_link($site_name) { $this->update_site('edu', $site_name); }
+	// public function update_jojoee_link($site_name) { $this->update_site('jojoee', $site_name); }
+	// public function update_youv_link($site_name) { $this->update_site('youv', $site_name); }
+
+	// public function update_all_news_links() { $this->update_all_sites('news'); }
+	// public function update_all_pantip_links() { $this->update_all_sites('pantip'); }
+	// public function update_all_edu_links() { $this->update_all_sites('edu'); }
+	// public function update_all_jojoee_links() { $this->update_all_sites('jojoee'); }
+	// public function update_all_youv_links() { $this->update_all_sites('youv'); }
+
 	/**
-	 * [update_pantip_links description]
-	 * @return [type] [description]
+	 * Update facebook page status
 	 */
-	public function update_all_pantip_links()
+	public function post($type)
 	{
-		$this->page_type = 'pantip';
-		$this->set_sites($this->page_type);
-		$this->update_all_links();
+		// if type is exists
+		if ( ! $this->is_type_exists($type)) return false;
+
+		// if ( ! is_allowed_time() ) return false;
+
+		$count = 0;
+		$this->page_type = $type;
+
+		$urls = $this->get_posts();
+
+		if (empty($urls)) return false;
+
+		$index = range(0, $this->post_limit - 1);
+		shuffle($index);
+
+		while ($count < 8)
+		{
+			$url = $urls[$index[$count]];
+			$site = $this->get_site_by_site_id($url['site_id']);
+
+			$post_title = $url['title'];
+			
+			// get post url
+			$post_url = $this->get_post_url($url['request_uri'], $site);
+
+			$is_url_exists = is_url_exists(urldecode($post_url));
+
+			//
+			// TODO
+			// don't know why some URL isn't exists
+			// e.g. https://blog.eduzones.com/studyabroad/143177
+			// 
+			if ($this->page_type == 'edu') $is_url_exists = true;
+			if ($this->page_type == 'youv') $is_url_exists = true;
+
+			if ($is_url_exists)
+			{
+				// 
+				// TODO - Use comment as a title
+				// 
+				// $comment = array();
+				// $comment_element = $site['comment_element'];
+				// if ($site['has_comment'] == 1) $comment = $this->get_targeted_data($post_url, $comment_element);
+				// 
+
+				// Facebook
+				try
+				{
+					$action = $this->publish_facebook($post_title, $post_url);
+					$action_id = $action['id'];
+					$this->news_model->update_published_link($url['id']);
+				}
+				catch (FacebookRequestException $ex)
+				{
+					printf('FacebookRequestException: %s', $ex->getMessage());
+					$this->news_model->insert_error_log('post', 'FacebookRequestException : '.$e->getMessage());
+
+					return false;
+				}
+				catch (\Exception $ex)
+				{
+					printf('Caught exception: %s', $ex->getMessage());
+					$this->news_model->insert_error_log('post', 'Exception : ' .$e->getMessage());
+
+					return false;
+				}
+
+				break;
+			}
+			else
+			{
+				$this->news_model->insert_error_log('post', 'link number '.$url['id'].' is broken');
+				$this->news_model->update_broken_link($url['id']);
+			}
+
+			$count++;
+		}
+
+		if (isset($action_id) && ! is_null_or_empty_string($action_id))
+		{
+			$this->news_model->insert_published_log($url['id'], $action_id);
+			printf('<code>Published</code>');
+		}
+		else
+		{
+			$this->news_model->insert_error_log('post', 'all urls are not exist');
+			printf('<code>Can not publish (all urls are not exist)</code>');
+		}
 	}
 
 	/**
-	 * See the scraped link by `site_name`
+	 * See all scraped links by `site name`
 	 * 
-	 * @param  [type] $site_name [description]
-	 * @return [type]            [description]
+	 * @param [string] $site_name
 	 */
 	public function see_link($site_name)
 	{
@@ -497,12 +566,6 @@ class News extends CI_Controller {
 		dd($data);
 	}
 
-	/**
-	 * Update the view of each url
-	 * 
-	 * @param  [type] $site [description]
-	 * @return [type]       [description]
-	 */
 	public function update_view($site)
 	{
 		// 
@@ -514,53 +577,26 @@ class News extends CI_Controller {
 		printf('<code>%s</code>', $site_name.' views have been scraped');
 	}
 
-	/**
-	 * [clean_data description]
-	 * 
-	 * @return [type] [description]
-	 */
 	public function clean()
 	{
 		$this->news_model->remove_old_record();
 		printf('<code>%s</code>', 'Cleaned');
 	}
 
-	/*================================================================
-		#Debug
-		================================================================*/
+	public function reset() { $this->news_model->truncate_url_table(); }
 
-	/**
-	 * Remove all data from url table
-	 */
-	public function reset()
-	{
-		$this->news_model->truncate_url_table();
-	}
-
-	/**
-	 * [stop description]
-	 * @return [type] [description]
-	 */
 	public function stop()
 	{
 		$this->news_model->stop_news();
 		printf('<code>%s</code>', 'Stopped');
 	}
 
-	/**
-	 * [start description]
-	 * @return [type] [description]
-	 */
 	public function start()
 	{
 		$this->news_model->start_news();
 		printf('<code>%s</code>', 'Started');
 	}
 
-	/**
-	 * [facebook_user_long_lived_session description]
-	 * @return [type] [description]
-	 */
 	public function facebook_user_long_lived_session()
 	{
 		$this->set_facebook_app();
@@ -569,10 +605,6 @@ class News extends CI_Controller {
 		dd($user_session);
 	}
 
-	/**
-	 * [facebook_page_long_lived_session description]
-	 * @return [type] [description]
-	 */
 	public function facebook_page_long_lived_session()
 	{
 		$this->set_facebook_app();
@@ -603,14 +635,26 @@ class News extends CI_Controller {
 		dd($results);
 	}
 
+	public function cron()
+	{
+		$items = $this->news_model->get_all_types();
+
+		foreach ($items as $item) {
+			$type = $item['type'];
+			$sites = $this->news_model->get_sites_by_type($type);
+
+			printf('<h4>%s</h4>', $type);
+			foreach ($sites as $site) {
+				printf('%s/%s<br />', '/usr/bin/GET http://lab.jojoee.com/nn/link', $site['name']);
+			}
+
+		}
+	}
+
 	/*================================================================
 		#Test
 		================================================================*/
 
-	/**
-	 * [test description]
-	 * @return [type] [description]
-	 */
 	public function test()
 	{
 		$this->load->library('unit_test');
@@ -624,10 +668,6 @@ class News extends CI_Controller {
 		echo $this->unit->report();
 	}
 
-	/**
-	 * [test_utility_helper description]
-	 * @return [type] [description]
-	 */
 	private function test_utility_helper()
 	{
 		$this->unit->use_strict(true);
@@ -718,17 +758,13 @@ class News extends CI_Controller {
 		$this->unit->run(remove_trailing_slash('category/product/'), 'category/product', 'remove_trailing_slash()');
 	}
 
-	/**
-	 * [test_news description]
-	 * @return [type] [description]
-	 */
 	private function test_news() {
 
 		$sites = $this->sites;
 		$this->unit->run($this->sites, 'is_array', '$this->sites');
 
 		foreach ($sites as $site) $this->unit->run($site, 'is_array', '$sites');
-		foreach ($sites as $site) $this->unit->run($this->get_site_by_name_id($site['id']), 'is_array', 'get_site_by_name_id()');
+		foreach ($sites as $site) $this->unit->run($this->get_site_by_site_id($site['id']), 'is_array', 'get_site_by_site_id()');
 	}
 }
 

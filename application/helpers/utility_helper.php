@@ -4,44 +4,11 @@
 	#Constants
 	================================================================*/
 
-/**
- * [get_github_url description]
- * TESTED
- * 
- * @return [type] [description]
- */
 function get_github_url() { return GITHUB_URL; }
-
-/**
- * [get_facebook_url description]
- * TESTED
- * 
- * @return [type] [description]
- */
 function get_facebook_url() { return FACEBOOK_URL; }
-
-/**
- * [get_twitter_url description]
- * TESTED
- * 
- * @return [type] [description]
- */
 function get_twitter_url() { return TWITTER_URL; }
 
-/**
- * [get_google_map_key description]
- * TESTED
- * 
- * @return [type] [description]
- */
 function get_google_map_key() { return GOOGLE_MAP_KEY; }
-
-/**
- * [get_ga_code description]
- * TESTED
- * 
- * @return [type] [description]
- */
 function get_ga_code() { return GA_CODE; }
 
 /*================================================================
@@ -66,9 +33,10 @@ function da($var) { dd($var, false); }
  * check string is null or empty
  * TESTED
  * 
- * @link	 http://stackoverflow.com/questions/381265/better-way-to-check-variable-for-null-or-empty-string
- * @param	[string]	$str
- * @return boolean
+ * @link http://stackoverflow.com/questions/381265/better-way-to-check-variable-for-null-or-empty-string
+ * 
+ * @param	 [string]	$str
+ * @return [boolean]
  */
 function is_null_or_empty_string($str = '')
 {
@@ -76,7 +44,7 @@ function is_null_or_empty_string($str = '')
 }
 
 /**
- * get client ip address
+ * Get client ip address
  * 
  * @return [string] ip of client
  */
@@ -99,10 +67,6 @@ function get_ip_addr()
 	return $ip;
 }
 
-/**
- * [get_referrer_link description]
- * @return [type] [description]
- */
 function get_referrer_link()
 {
 	$refer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
@@ -117,7 +81,7 @@ function get_referrer_link()
 }
 
 /**
- * is string start with 'your-string'
+ * Is string start with 'your-string' ?
  * TESTED
  * 
  * @link http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
@@ -135,9 +99,8 @@ function start_with($haystack, $needle)
 }
  
 /**
- * is string end with 'your-string'
+ * Is string end with 'your-string' ?
  * TESTED
- * 
  *
  * @link http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
  *
@@ -154,11 +117,9 @@ function end_with($haystack, $needle)
 }
 
 /**
- * gets the data from a URL
+ * Gets the data from a URL
  *
  * @link http://davidwalsh.name/curl-download
- * 
- * @example $arr = 'myvar1=' . $myvar1 . '&myvar2=' . $myvar2;
  */
 function get_url_data($url, $post_datas = '')
 {
@@ -182,11 +143,11 @@ function get_url_data($url, $post_datas = '')
 }
 
 /**
- * [get_current_domain_name description] only domain name (no sub domain)
+ * Get domain name only (no sub domain including)
  * TESTED
  *
- * @link	http://stackoverflow.com/questions/10717249/get-current-domain
- * @link	http://stackoverflow.com/questions/1201194/php-getting-domain-name-from-subdomain
+ * @link http://stackoverflow.com/questions/10717249/get-current-domain
+ * @link http://stackoverflow.com/questions/1201194/php-getting-domain-name-from-subdomain
  *
  * @example get_domain_name() // current domain name
  * @example http://somedomain.co.uk // somedomain.co.uk
@@ -201,7 +162,7 @@ function get_url_data($url, $post_datas = '')
  * @example http://www.studentloan.ktb.co.th?quewadsas=2faddasdas
  * @example http://www.studentloan.ktb.co.th/2011/20/01?=asdasdasdasd
  * 
- * @return [type] [description]
+ * @return [string]
  */
 function get_domain_name($url = '')
 {
@@ -222,13 +183,15 @@ function get_domain_name($url = '')
 }
 
 /**
- * [get_request_url description]
+ * Get request URL
  * TESTED
  * 
  * @example /
  * @example /stainless-steel/urinals
  * 
- * @return [type] [description]
+ * @param  [string] $uri
+ * @param  [string] $full_domain_name domain name including sub domain
+ * @return [string]
  */
 function get_request_url($url = '', $full_domain_name = '')
 {	
@@ -248,18 +211,10 @@ function get_request_url($url = '', $full_domain_name = '')
 	return $results;
 }
 
-/**
- * [get_request_uri description]
- * TESTED
- * 
- * @param  [type] $uri              [description]
- * @param  [type] $full_domain_name [description]
- * @return [type]                   [description]
- */
 function get_request_uri($uri, $full_domain_name) { return get_request_url($uri, $full_domain_name); }
 
 /**
- * [get_full_domain_name description]
+ * Get full domain name (domain name including sub domain)
  * TESTED
  * 
  * @param  string $url [description]
@@ -279,16 +234,14 @@ function get_full_domain_name($url = '')
 }
 
 /**
- * [is_url_exists description]
+ * Check if your url is exists
  * TESTED
  * 
- * @param	[type]	$url [description]
- *
- * HTTP/1.1 200 OK Date: Fri, 27 Feb 2015 07:33:01 GMT Server: Apache/2.2.29 (Unix) mod_ssl/2.2.29 OpenSSL/1.0.1e-fips mod_bwlimited/1.4 X-Powered-By: PHP/5.4.34 Expires: Thu, 19 Nov 1981 08:52:00 GMT Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0 Pragma: no-cache Set-Cookie: PHPSESSID=v6s6ufjgj3h3stk111bmgtt0h0; path=/ Set-Cookie: ci_session=a%3A5%3A%7Bs%3A10%3A%22session_id%22%3Bs%3A32%3A%226381b64c912fa51884ddf7e523bcad9a%22%3Bs%3A10%3A%22ip_address%22%3Bs%3A13%3A%2254.255.143.64%22%3Bs%3A10%3A%22user_agent%22%3Bb%3A0%3Bs%3A13%3A%22last_activity%22%3Bi%3A1425022382%3Bs%3A9%3A%22user_data%22%3Bs%3A0%3A%22%22%3B%7D0048f31a44445bc38328040f5b11fca6; expires=Fri, 27-Feb-2015 09:33:02 GMT; path=/ Vary: User-Agent,Accept-Encoding Expires: Tue, 16 Jun 2025 20:00:00 GMT Content-Type: text/html
- *
  * @link https://css-tricks.com/snippets/php/check-if-website-is-available/
  * @link http://stackoverflow.com/questions/2280394/how-can-i-check-if-a-url-exists-via-php
- * @return boolean			[description]
+ * 
+ * @param  [string]	 $url
+ * @return [boolean]
  */
 function is_url_exists($url)
 {
@@ -299,11 +252,11 @@ function is_url_exists($url)
 }
 
 /**
- * [is_404 description]
+ * Is URL 404 ?
  * TESTED
  * 
- * @param  [type]  $url [description]
- * @return boolean      [description]
+ * @param  [string]  $url
+ * @return [boolean]
  */
 function is_404($url)
 {
@@ -314,9 +267,9 @@ function is_404($url)
 }
 
 /**
- * [get_header_response description]
- * @param  [type] $url [description]
- * @return [type]      [description]
+ * Get header response
+ * @param  [string] $url
+ * @return [string]
  */
 function get_header_response($url)
 {
@@ -340,11 +293,11 @@ function get_header_response($url)
 }
 
 /**
- * [is_url_redirects description]
+ * Is URL redirect ?
  * TESTED
  * 
- * @param  [type]  $url [description]
- * @return boolean      [description]
+ * @param  [string]  $url
+ * @return [boolean]
  */
 function is_url_redirects($url)
 {
@@ -355,11 +308,11 @@ function is_url_redirects($url)
 }
 
 /**
- * [get_extension description]
+ * Get file extension
  * TESTED
  * 
- * @param  [type] $file_name [description]
- * @return [type]            [description]
+ * @param  [string] $file_name
+ * @return [string]
  */
 function get_extension($file_name)
 {
@@ -370,13 +323,13 @@ function get_extension($file_name)
 }
 
 /**
- * [get_full_url description]
+ * Get full URL
  * TESTED
  * 
  * @link http://stackoverflow.com/questions/6768793/get-the-full-url-in-php
  * @link http://stackoverflow.com/questions/14912943/how-to-print-current-url-path
  * 
- * @return [type] [description]
+ * @return [string]
  */
 function get_full_url()
 {
@@ -386,11 +339,11 @@ function get_full_url()
 }
 
 /**
- * [remove_trailing_slash description]
+ * Remove trailing slash
  * TESTED
  * 
- * @param  [type] $str [description]
- * @return [type]      [description]
+ * @param  [string] $str
+ * @return [string]
  */
 function remove_trailing_slash($str)
 {
@@ -398,19 +351,22 @@ function remove_trailing_slash($str)
 }
 
 /**
- * [get_date_ago description]
- * @param  string $n [description]
- * @return [type]    [description]
+ * Get `n` date ago
+ * 
+ * @param  [number] $n
+ * @return [date]
  */
 function get_date_ago($n = '30') { return date('Y-m-d', strtotime('-'.$n.' days')); }
 
 
 /**
- * [nhuman_time_diff description]
- * @param  [type] $from [description]
- * @param  [type] $to   [description]
+ * Get human time difference
+ *
  * @link http://stackoverflow.com/questions/2915864/php-how-to-find-the-time-elapsed-since-a-date-time
- * @return [type]       [description]
+ * 
+ * @param  [datetime] $from
+ * @param  [datetime] $to
+ * @return [string]
  */
 function human_time_diff($from, $to)
 {
@@ -435,182 +391,3 @@ function human_time_diff($from, $to)
 		return $number_of_units.' '.$text.(($number_of_units > 1) ? 's':'' );
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*================================================================
-	#Vendor - Facebook
-	================================================================*/
-
-
-
-
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-// UNCHECK
-
-
-// function is_url_exist( $url ) {
-
-//	 $ch = curl_init( $url );
-//	 curl_setopt( $ch, CURLOPT_NOBODY, true );
-//	 curl_exec( $ch );
-//	 $code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-
-//	 if ( $code == 200 ) {
-//		$status = true;
-//	 } else {
-//		 $status = false;
-//	 }
-	
-//	 curl_close( $ch );
-//	 return $status;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function is_home() {
-//	 $CI = &get_instance();
-//	 $page = trim( $CI->uri->segment(1) );
-
-//	 if ( $page == '' ) {
-//		 return true;
-//	 } else {
-//		 return false;
-//	 }
-// }
-
-
-function is_home() {
-	return is_page( '' );
-}
-
-function is_contact_us() {
-	return is_page( 'contact-us' );
-}
-
-function is_faq() {
-	return is_page( 'faq' );
-}
-
-function is_page( $slug ) {
-	$current_url = get_full_url();
-	if ( ( $current_url == ( base_url() . $slug ) ) || ( $current_url == ( base_url() . $slug . '/' ) ) ) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-
-function get_canonical_tag() {
-	$url = get_full_url();
-
-	return str_replace( 'm.britex', 'www.britex', $url );
-}
-
-function replace_base_url( $str ) {
-	$str = str_replace( '#base_url#', base_url(), $str );
-	$str = str_replace( '#base_url_index#', base_url(), $str );
-	$str = str_replace( 'http://www.britex.com.au/', base_url(), $str );
-
-	return $str;
-}
-
-function replace_base_url_with_main_site( $str ) {
-	$main_site = 'http://www.britex.com.au/';
-	$str = str_replace( '#base_url#', $main_site, $str );
-	$str = str_replace( '#base_url_index#', $main_site, $str );
-
-	return $str;
-}
-
-function get_product_display_name_two_line( $str ) {
-	return get_part_of_string( $str, 26 );
-}
-
-function get_part_of_string( $str, $number ) {
-	$maximum_length = $number;
-	if ( strlen( trim( $str ) ) > $maximum_length ) {
-		// $result = substr( $product['display_product_name'], 0, -3 ) . '...';
-		$result = substr( $str, 0, $maximum_length - 3 ) . '...';
-	} else {
-		$result = $str;
-	}
-
-	return $result;
-}
-
-function get_product_search_desc( $str ) {
-	return get_part_of_string( $str, 47 );
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
