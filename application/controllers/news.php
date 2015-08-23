@@ -74,36 +74,6 @@ class News extends CI_Controller {
 		return $results;
 	}
 
-	// private function set_facebook_page()
-	// {
-	// 	switch ($this->page_type)
-	// 	{
-	// 		case 'news':
-	// 			$this->page_id = $this->fb_model->get_facebook_news_page_id();
-	// 			$this->page_access_token = $this->fb_model->get_facebook_news_page_access_token();
-	// 			break;
-	// 		case 'pantip':
-	// 			$this->page_id = $this->fb_model->get_facebook_pantip_page_id();
-	// 			$this->page_access_token = $this->fb_model->get_facebook_pantip_page_access_token();
-	// 			break;
-	// 		case 'edu':
-	// 			$this->page_id = $this->fb_model->get_facebook_edu_page_id();
-	// 			$this->page_access_token = $this->fb_model->get_facebook_edu_page_access_token();
-	// 			break;
-	// 		case 'jojoee':
-	// 			$this->page_id = $this->fb_model->get_facebook_jojoee_page_id();
-	// 			$this->page_access_token = $this->fb_model->get_facebook_jojoee_page_access_token();
-	// 			break;
-	// 		case 'youv':
-	// 			$this->page_id = $this->fb_model->get_facebook_youv_page_id();
-	// 			$this->page_access_token = $this->fb_model->get_facebook_youv_page_access_token();
-	// 			break;
-	// 		default:
-	// 			$this->page_id = $this->fb_model->get_facebook_news_page_id();
-	// 			$this->page_access_token = $this->fb_model->get_facebook_news_page_access_token();
-	// 	}
-	// }
-
 	private function set_facebook_page()
 	{
 		$this->page_id = $this->fb_model->get_facebook_page_id($this->page_type);
@@ -317,41 +287,21 @@ class News extends CI_Controller {
 		return $post_url;
 	}
 
-	// private function get_random_posts()
-	// {
-	// 	$urls = array();
-	// 	switch ($this->page_type)
-	// 	{
-	// 		case 'news':
-	// 			$urls = $this->news_model->get_random_news($this->post_limit);
-	// 			break;
-	// 		case 'pantip':
-	// 			$urls = $this->news_model->get_random_pantip($this->post_limit);
-	// 			break;
-	// 		case 'edu':
-	// 			$urls = $this->news_model->get_random_edu($this->post_limit);
-	// 			break;
-	// 		case 'jojoee':
-	// 			$urls = $this->news_model->get_random_jojoee($this->post_limit);
-	// 			break;
-	// 		case 'youv':
-	// 			$urls = $this->news_model->get_random_youv($this->post_limit);
-	// 			break;
-	// 		default:
-	// 			$urls = $this->news_model->get_random_news($this->post_limit);
-	// 	}
-	//
-	// 	return $urls;
-	// }
-
+	private function get_published_posts() { return $this->news_model->get_random_urls($this->page_type, $this->post_limit, 1); }
 	private function get_random_posts() { return $this->news_model->get_random_urls($this->page_type, $this->post_limit); }
 	private function get_latest_posts() { return $this->news_model->get_latest_urls($this->page_type, $this->post_limit); }
 
 	private function get_posts()
 	{
+		// random posts
 		$urls = $this->get_random_posts();
+		
+		// latest posts
 		// $urls = $this->get_latest_posts();
 
+		// if no non-published
+		if (empty($urls)) $urls = $this->get_published_posts();;
+		
 		return $urls;
 	}
 
@@ -445,19 +395,7 @@ class News extends CI_Controller {
 		$time_elapsed_secs = microtime(true) - $started_time;
 		printf('<br /><code>%d links found, Total execution time %f<br />', $this->found_link, $time_elapsed_secs);
 	}
-
-	// public function update_news_link($site_name) { $this->update_site('news', $site_name);}
-	// public function update_pantip_link($site_name) { $this->update_site('pantip', $site_name); }
-	// public function update_edu_link($site_name) { $this->update_site('edu', $site_name); }
-	// public function update_jojoee_link($site_name) { $this->update_site('jojoee', $site_name); }
-	// public function update_youv_link($site_name) { $this->update_site('youv', $site_name); }
-
-	// public function update_all_news_links() { $this->update_all_sites('news'); }
-	// public function update_all_pantip_links() { $this->update_all_sites('pantip'); }
-	// public function update_all_edu_links() { $this->update_all_sites('edu'); }
-	// public function update_all_jojoee_links() { $this->update_all_sites('jojoee'); }
-	// public function update_all_youv_links() { $this->update_all_sites('youv'); }
-
+	
 	/**
 	 * Update facebook page status
 	 */
@@ -756,6 +694,14 @@ class News extends CI_Controller {
 		$this->unit->run(remove_trailing_slash('/category/product/'), '/category/product', 'remove_trailing_slash()');
 		$this->unit->run(remove_trailing_slash('/category/product'), '/category/product', 'remove_trailing_slash()');
 		$this->unit->run(remove_trailing_slash('category/product/'), 'category/product', 'remove_trailing_slash()');
+
+		for ($i=0; $i < 20; $i++) { 
+			$urls = $this->get_posts();
+
+			foreach ($urls as $url) {
+				$this->unit->run($url['is_publish'], '0', 'get_posts()');
+			}	
+		}
 	}
 
 	private function test_news() {

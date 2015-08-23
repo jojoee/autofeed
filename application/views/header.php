@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8" />
-<title>Labs | Jojoee</title>
+<title>AutoFeed</title>
 <meta name="robots" content="noindex,nofollow,noarchive" />
 <?php echo link_tag('favicon.ico', 'shortcut icon', 'image/ico'); ?>
 <?php echo link_tag('imgs/favicon.ico', 'shortcut icon', 'image/ico'); ?>

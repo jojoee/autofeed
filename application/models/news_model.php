@@ -212,12 +212,12 @@ class News_model extends CI_Model {
 		$this->db->update($this->tbl_url, $data);
 	}
 	
-	public function get_random_urls($type, $limit)
+	public function get_random_urls($type, $limit, $is_publish = 0)
 	{
 		$where = array(
 			$this->tbl_url.'.is_active'   => 1,
 			$this->tbl_url.'.is_broken'   => 0,
-			$this->tbl_url.'.is_publish'  => 0,
+			$this->tbl_url.'.is_publish'  => $is_publish,
 			$this->tbl_site.'.type'       => $type
 		);
 		$join_where = $this->tbl_url.'.site_id = '.$this->tbl_site.'.id';
@@ -255,12 +255,6 @@ class News_model extends CI_Model {
 
 		return $query->result_array();
 	}
-
-	// public function get_random_news($limit) { return $this->get_random_urls('news', $limit); }
-	// public function get_random_pantip($limit) { return $this->get_random_urls('pantip', $limit); }
-	// public function get_random_edu($limit) { return $this->get_random_urls('edu', $limit); }
-	// public function get_random_jojoee($limit) { return $this->get_random_urls('jojoee', $limit); }
-	// public function get_random_youv($limit) { return $this->get_random_urls('youv', $limit); }
 
 	public function get_url_by_id($id)
 	{
@@ -331,7 +325,7 @@ class News_model extends CI_Model {
 
 		$this->remove_old_news_url($one_week_ago);
 		$this->remove_old_pantip_url($three_month_ago);
-		$this->remove_old_edu_url($three_month_ago);
+		$this->remove_old_edu_url($two_month_ago);
 		$this->remove_old_jojoee_url($three_month_ago);
 		$this->remove_old_youv_url($three_month_ago);
 

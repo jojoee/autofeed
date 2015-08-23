@@ -39,32 +39,12 @@
 */
 
 $route['default_controller'] = 'welcome';
-$route['quote'] = 'welcome/quote';
-
-// $route['nn/link'] = 'news/update_all_news_links';
-// $route['nn/link/(:any)'] = 'news/update_news_link/$1';
-
-// $route['nn/pantiplink'] = 'news/update_all_pantip_links';
-// $route['nn/pantiplink/(:any)'] = 'news/update_pantip_link/$1';
-
-// $route['nn/edulink'] = 'news/update_all_edu_links';
-// $route['nn/edulink/(:any)'] = 'news/update_edu_link/$1';
-
-// $route['nn/jojoeelink'] = 'news/update_all_jojoee_links';
-// $route['nn/jojoeelink/(:any)'] = 'news/update_jojoee_link/$1';
-
-// $route['nn/youvlink'] = 'news/update_all_youv_links';
-// $route['nn/youvlink/(:any)'] = 'news/update_youv_link/$1';
-
-// $route['nn/post/news'] = 'news/post/news';
-// $route['nn/pantippost'] = 'news/post/pantip';
 
 $route['nn/link/(:any)'] = 'news/update_site/$1';
 $route['nn/all/(:any)'] = 'news/update_all_sites/$1';
 $route['nn/post/(:any)'] = 'news/post/$1';
 
 $route['nn/log/(:any)'] = 'news/log/$1';
-
 $route['nn/seelink/(:any)'] = 'news/see_link/$1';
 
 $route['nn/cron'] = 'news/cron';

@@ -23,21 +23,6 @@ class Welcome extends CI_Controller {
 		$this->_display('hello');
 	}
 
-	public function quote()
-	{
-		$format = 'json';
-		$max_lines = 1;
-		$max_characters = 88;
-		$url = sprintf('http://www.iheartquotes.com/api/v1/random?format=%s&max_lines=%d&max_characters=%d',
-			$format,
-			$max_lines,
-			$max_characters);
-
-		$json = file_get_contents($url);
-
-		echo $json;
-	}
-
 	public function error_404()
 	{
 		$this->_display('error_404');
