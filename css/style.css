@@ -1,0 +1,23 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #fff;
+  font-size: 100%;
+}
+
+p {
+  color: #7EA2B8;
+  margin-top: -3em;
+}
+
+.wrapper {
+  text-align: center;
+  margin-top: 15em;
+}
+  
+.logo {
+  /* color: #6AC293; */
+	color: #03B48D;
+  font-weight: bold;
+  font-size: 4em;
+  font-weight: bold;
+}

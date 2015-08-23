@@ -38,9 +38,46 @@
 |
 */
 
-$route['default_controller'] = "welcome";
-$route['404_override'] = '';
+/*
+| -------------------------------------------------------------------------
+| Welcome
+| -------------------------------------------------------------------------
+*/
 
+$route['default_controller'] = 'welcome';
+$route['quote'] = 'welcome/quote';
+
+/*
+| -------------------------------------------------------------------------
+| News
+| -------------------------------------------------------------------------
+*/
+
+// $route['nn'] = 'news';
+$route['nn/link/(:any)'] = 'news/update_link/$1';
+$route['nn/seelink/(:any)'] = 'news/see_link/$1';
+// $route['nn/view/(:any)'] = 'news/update_view/$1';
+// $route['nn/seeview/(:any)'] = 'news/see_link/$1';
+
+$route['nn/post'] = 'news/post_news';
+$route['nn/alllink'] = 'news/update_all_links';
+$route['nn/stop'] = 'news/stop';
+$route['nn/start'] = 'news/start';
+
+$route['nn/fbullss'] = 'news/facebook_user_long_lived_session';
+$route['nn/fbpllss'] = 'news/facebook_page_long_lived_session';
+
+$route['nn/test'] = 'news/test';
+$route['nn/reset'] = 'news/reset';
+
+/*
+| -------------------------------------------------------------------------
+| CI
+| -------------------------------------------------------------------------
+*/
+
+$route['404_override'] = 'welcome/error_404';
+// $route['404_override'] = '';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

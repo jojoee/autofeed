@@ -27,15 +27,34 @@ define('DIR_WRITE_MODE', 0777);
 |
 */
 
-define('FOPEN_READ',							'rb');
-define('FOPEN_READ_WRITE',						'r+b');
-define('FOPEN_WRITE_CREATE_DESTRUCTIVE',		'wb'); // truncates existing file data, use with care
-define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE',	'w+b'); // truncates existing file data, use with care
-define('FOPEN_WRITE_CREATE',					'ab');
-define('FOPEN_READ_WRITE_CREATE',				'a+b');
-define('FOPEN_WRITE_CREATE_STRICT',				'xb');
-define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
+define('FOPEN_READ',                            'rb');
+define('FOPEN_READ_WRITE',                      'r+b');
+define('FOPEN_WRITE_CREATE_DESTRUCTIVE',        'wb'); // truncates existing file data, use with care
+define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE',   'w+b'); // truncates existing file data, use with care
+define('FOPEN_WRITE_CREATE',                    'ab');
+define('FOPEN_READ_WRITE_CREATE',               'a+b');
+define('FOPEN_WRITE_CREATE_STRICT',             'xb');
+define('FOPEN_READ_WRITE_CREATE_STRICT',        'x+b');
 
+/*
+|--------------------------------------------------------------------------
+| Custom
+|--------------------------------------------------------------------------
+*/
+
+define('GITHUB_URL'               , 'GITHUB_URL');
+define('FACEBOOK_URL'             , 'FACEBOOK_URL');
+define('TWITTER_URL'              , 'TWITTER_URL');
+
+define('GOOGLE_MAP_KEY'           , 'GOOGLE_MAP_KEY');
+define('GA_CODE'                  , 'UA-XXXXXXXX-X');
+
+define('FB_APP_ID'                , 'FB_APP_ID');
+define('FB_APP_SECRET'            , 'FB_APP_SECRET');
+define('FB_USER_ID'               , 'FB_USER_ID');
+define('FB_USER_ACCESS_TOKEN'     , 'FB_USER_ACCESS_TOKEN');
+define('FB_PAGE_ID'               , 'FB_PAGE_ID');
+define('FB_PAGE_ACCESS_TOEKN'     , 'FB_PAGE_ACCESS_TOEKN');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
