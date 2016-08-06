@@ -119,7 +119,7 @@ class News_model extends CI_Model {
 
 	public function get_sites($type = '')
 	{
-		$where = array('is_active' => 1 );
+		$where = array('is_active' => 1);
 
 		if ( ! is_null_or_empty_string($type)) $where['type'] = $type;
 
