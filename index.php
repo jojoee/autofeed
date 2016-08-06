@@ -18,8 +18,26 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
+
+$prefix             = 'atf'; // unused
+define('ATF_SITE_ENV', getenv('SITE_ENV'));
+define('ATF_BASE_URL', getenv('BASE_URL'));
+define('ATF_ENCRYPTION_KEY', getenv('ENCRYPTION_KEY'));
+define('ATF_DB_LOCAL_HOST', getenv('DB_LOCAL_HOST'));
+define('ATF_DB_LOCAL_NAME', getenv('DB_LOCAL_NAME'));
+define('ATF_DB_LOCAL_USER', getenv('DB_LOCAL_USER'));
+define('ATF_DB_LOCAL_PASS', getenv('DB_LOCAL_PASS'));
+define('ATF_DB_PROD_HOST', getenv('DB_PROD_HOST'));
+define('ATF_DB_PROD_NAME', getenv('DB_PROD_NAME'));
+define('ATF_DB_PROD_USER', getenv('DB_PROD_USER'));
+define('ATF_DB_PROD_PASS', getenv('DB_PROD_PASS'));
+
+if (ATF_SITE_ENV === 'local') {
 	define('ENVIRONMENT', 'development');
-	// define('ENVIRONMENT', 'production');
+
+} else {
+	define('ENVIRONMENT', 'production');
+}
 	
 /*
  *---------------------------------------------------------------
@@ -50,7 +68,6 @@ if (defined('ENVIRONMENT'))
 
 		case 'testing':
 		case 'production':
-			// error_reporting(E_ALL);
 			error_reporting(0);
 		break;
 

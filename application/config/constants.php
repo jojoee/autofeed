@@ -42,10 +42,10 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',        'x+b');
 |--------------------------------------------------------------------------
 */
 
+// Unused
 define('GITHUB_URL'               , 'GITHUB_URL');
 define('FACEBOOK_URL'             , 'FACEBOOK_URL');
 define('TWITTER_URL'              , 'TWITTER_URL');
-
 define('GOOGLE_MAP_KEY'           , 'GOOGLE_MAP_KEY');
 define('GA_CODE'                  , 'UA-XXXXXXXX-X');
 

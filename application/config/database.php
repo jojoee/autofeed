@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'db_hostname';
-$db['default']['username'] = 'db_username';
-$db['default']['password'] = 'db_password';
-$db['default']['database'] = 'db_name';
+$db['default']['hostname'] = ATF_DB_PROD_HOST;
+$db['default']['database'] = ATF_DB_PROD_NAME;
+$db['default']['username'] = ATF_DB_PROD_USER;
+$db['default']['password'] = ATF_DB_PROD_PASS;
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

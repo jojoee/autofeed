@@ -3,10 +3,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'dev_db_hostname';
-$db['default']['username'] = 'dev_db_username';
-$db['default']['password'] = 'dev_db_password';
-$db['default']['database'] = 'dev_db_name';
+$db['default']['hostname'] = ATF_DB_LOCAL_HOST;
+$db['default']['database'] = ATF_DB_LOCAL_NAME;
+$db['default']['username'] = ATF_DB_LOCAL_USER;
+$db['default']['password'] = ATF_DB_LOCAL_PASS;
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
