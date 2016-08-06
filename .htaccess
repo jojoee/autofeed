@@ -5,4 +5,3 @@ RewriteEngine on
 RewriteCond $1 !^(index\.php|css|captcha|smileys|images|js|test|robots\.txt)
 RewriteRule ^(.*)$ /index.php/$1 [L]
 
-Header set Access-Control-Allow-Origin "http://sitename.com"
