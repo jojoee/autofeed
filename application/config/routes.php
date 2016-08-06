@@ -44,6 +44,7 @@ $route['nn/link/(:any)'] = 'news/update_site/$1';
 $route['nn/all/(:any)'] = 'news/update_all_sites/$1';
 $route['nn/post/(:any)'] = 'news/post/$1';
 
+// Why ????
 $route['nn/log/(:any)'] = 'news/log/$1';
 $route['nn/seelink/(:any)'] = 'news/see_link/$1';
 

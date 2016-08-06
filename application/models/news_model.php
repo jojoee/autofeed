@@ -43,6 +43,7 @@ class News_model extends CI_Model {
 		return $query->result_array();
 	}
 
+	// Why ????
 	public function update_log($name)
 	{
 		switch ($name) {
@@ -55,6 +56,7 @@ class News_model extends CI_Model {
 		}
 	}
 
+	// Why ????
 	public function update_log_new_link()
 	{
 		$one_day_ago = get_date_ago('1');

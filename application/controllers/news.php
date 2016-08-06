@@ -364,6 +364,7 @@ class News extends CI_Controller {
 		#Public
 		================================================================*/
 
+	// Why ????
 	public function log($name)
 	{
 		$this->news_model->update_log($name);
