@@ -116,6 +116,18 @@ class News_model extends CI_Model {
 
 		$this->db->insert($this->tbl_scraped_log, $data);
 	}
+	
+	public function get_inactive_sites($type = '')
+	{
+		$where = array('is_active' => 0);
+
+		if ( ! is_null_or_empty_string($type)) $where['type'] = $type;
+
+		$this->db->where($where);
+		$query = $this->db->get($this->tbl_site);
+
+		return $query->result_array();
+	}
 
 	public function get_sites($type = '')
 	{
@@ -320,24 +332,30 @@ class News_model extends CI_Model {
 	 */
 	public function remove_old_record()
 	{
+		$one_day_ago = get_date_ago('1');
 		$one_week_ago = get_date_ago('7');
 		$one_month_ago = get_date_ago('30');
-		$two_month_ago = get_date_ago('60');
+		$two_month_ago = get_date_ago('60'); // unused
 		$three_month_ago = get_date_ago('90');
 
-		$this->remove_old_news_url($one_week_ago);
-		$this->remove_old_pantip_url($three_month_ago);
-		$this->remove_old_edu_url($two_month_ago);
+		$this->remove_old_news_url($one_day_ago);
+		$this->remove_old_pantip_url($one_week_ago);
+		$this->remove_old_edu_url($one_week_ago);
 		$this->remove_old_jojoee_url($three_month_ago);
 		$this->remove_old_youv_url($three_month_ago);
+		$this->remove_old_yumm_url($two_month_ago);
 
 		$this->remove_old_scraped_log($one_month_ago);
 		$this->remove_old_published_log($one_month_ago);
+		$this->remove_old_error_log($one_month_ago);
+		$this->remove_old_log($one_month_ago);
 	}
 
 	public function remove_old_url($type, $date)
 	{
-		$sites = $this->get_sites($type);
+		$active_sites = $this->get_sites($type);
+		$inactive_sites = $this->get_inactive_sites($type);
+		$sites = array_merge($active_sites, $inactive_sites);
 
 		foreach ($sites as $site)
 		{
@@ -355,6 +373,7 @@ class News_model extends CI_Model {
 	private function remove_old_edu_url($date) { $this->remove_old_url('edu', $date); }
 	private function remove_old_jojoee_url($date) { $this->remove_old_url('jojoee', $date); }
 	private function remove_old_youv_url($date) { $this->remove_old_url('youv', $date); }
+	private function remove_old_yumm_url($date) { $this->remove_old_url('yumm', $date); }
 
 	public function remove_old_scraped_log($date)
 	{
@@ -372,5 +391,11 @@ class News_model extends CI_Model {
 	{
 		$this->db->where('created_date <', $date);
 		$this->db->delete($this->tbl_error_log);
+	}
+
+	public function remove_old_log($date)
+	{
+		$this->db->where('created_date <', $date);
+		$this->db->delete($this->tbl_log);
 	}
 }
